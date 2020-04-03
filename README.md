@@ -41,7 +41,7 @@ These modules support ansible version 2.8.1 and onwards.
 * Licenses the NSX Manager
 * Creates an IP Pool ONLY FOR THE EDGES (I have DHCP in my homelab so if you want more pools then you need to add another pool in the yaml)
 * Creates NSX Edge Uplink Profiles (MTU 1600) with named teaming profiles and multi-tep
-* Creates ESXi Uplink Profile ( No MTU ) with namted teaming profiles and multi-tep
+* Creates ESXi Uplink Profile ( No MTU ) with named teaming profiles and multi-tep (VDS backed TNs with an MTU specified in the profile generates an error since the VDS controls the MTU)
 * Creates 3 Transport Zones (1 for Edges, 1 for ESXi Hosts, 1 for VLAN all backed by 1 NVDS)
 * Creates a TN Profile for the ESXi hosts with a vCenter 7 VDS as the backing switch
 * Attaches the TN Profile to the cluster named in the variable 
