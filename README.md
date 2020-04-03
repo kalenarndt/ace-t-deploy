@@ -55,7 +55,7 @@ These modules support ansible version 2.8.1 and onwards.
 Creates a Tier-0 Logical Router (t0-ecmp)
 * * Configures ECMP
 * * Enables BGP
-* * * Sets the local AS number
+    * Sets the local AS number
 * * * Sets 1 BGP neighbor for fabric a
 * * * Sets the source addresses to be the router ports that exist on the vlan for fabric a
 * * * Configures modified BGP timers for 4, 12
