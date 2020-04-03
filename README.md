@@ -50,18 +50,18 @@ These modules support ansible version 2.8.1 and onwards.
 * Creates an Edge cluster (named edge-cluster-01) and adds edge1 and edge2 to the cluster object
 * Creates 2 VLAN backed Segments in the tz-edge transport zone (for edge peering)
 * Assigns a VLAN tag (200 and 201 based on the yaml change this to match your environment)
-* * Sets a named teaming policy to force connectivity out fp-eth0 for fabric-a for vlan segment 200
-* * Sets a named teaming policy to force connectivity out fp-eth1 for fabric-b for vlan segment 201
+  * Sets a named teaming policy to force connectivity out fp-eth0 for fabric-a for vlan segment 200
+  * Sets a named teaming policy to force connectivity out fp-eth1 for fabric-b for vlan segment 201
 Creates a Tier-0 Logical Router (t0-ecmp)
-* * Configures ECMP
-* * Enables BGP
+  * Creates 4 router ports (2 per edge, 1 per vlan)
+  * Configures ECMP
+  * Enables BGP
     * Sets the local AS number
-* * * Sets 1 BGP neighbor for fabric a
-* * * Sets the source addresses to be the router ports that exist on the vlan for fabric a
-* * * Configures modified BGP timers for 4, 12
-* * * Configures a BFD peer for this neighbor
-* * * Enables Route Redistribution [TIER0_CONNECTED, TIER0_NAT, TIER1-Connected, T1_LB_VIP]
-* * Creates 4 router ports (2 per edge, 1 per vlan)
+    * Sets 1 BGP neighbor for fabric a
+    * Sets the source addresses to be the router ports that exist on the vlan for fabric a
+    * Configures modified BGP timers for 4, 12
+    * Configures a BFD peer for this neighbor
+    * Enables Route Redistribution [TIER0_CONNECTED, TIER0_NAT, TIER1-Connected, T1_LB_VIP]
 * Creates a Tier-1 Logical Router (t1-general)
 * Downlinks the Tier-1 to t0-ecmp
 * Configures route redistribution for TIER1_CONNECTED, TIER1_LB_VIP
