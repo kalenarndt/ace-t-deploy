@@ -9,7 +9,7 @@
     "nsx_password": "VMware123!VMware123!",
     "validate_certs": "false",
 
-    "state": "absent",
+    "state": "present",
 
     "tier0_gateways": [
       {
