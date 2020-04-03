@@ -1,0 +1,530 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+#
+# Variables file for deploying NSX-T Cluster
+#
+{
+
+  #
+  # Common NSX Appliance variables
+  #
+  "nsx_username": "admin",
+  "nsx_password": "VMware123!VMware123!",
+  "validate_certs": False,
+  #
+  # Flag to create or delete all the objects
+  # Accepts: 'present' to create; 'absent' to delete
+  #
+  "state": "present",
+
+  #
+  # OVA/OVF Information. Path can be on local file system or a HTTP URL
+  #
+  "nsx_ova_path": "/mnt/c/Temp",
+  "nsx_ova": "nsx-unified-appliance-3.0.0.0.0.15946739.ova",
+
+  #
+  # Common network details. This assumes all NSX appliance nodes are on the
+  # same subnet. If there is a need to deploy NSX appliance nodes which are
+  # on different subnets, add node specific details in the blocks below and
+  # use them in the playbooks instead.
+  #
+  "domain": "bmrf.io",
+  "netmask": "255.255.255.0",
+  "gateway": "172.16.24.1",
+  "dns_server": "172.16.11.2 172.16.11.3",
+  "ntp_server": "time.bmrf.io time.google.com",
+  "ssh_enabled": True,
+  "deployment_size": "SMALL",
+  "allow_ssh_root_login": True,
+  "license_key": "xxxxx-xxxxx-xxxxx-xxxxx-xxxxx",
+  "nsxt_vip": "172.16.24.14",
+
+  #
+  # First NSX appliance node. Defined separate based on the consumption.
+  # Accepts both IP (IPv4) and FQDN for 'mgmt_ip'
+  #
+  "nsx_node1": {
+    "hostname": "nsxt-lm1.sa.bmrf.io",
+    "mgmt_ip": "172.16.24.13",
+    "datacenter": "Black Mesa",
+    "cluster": "Sector F",
+    "datastore": "iSCSI",
+    "portgroup": "Sector-A-VL24"
+  },
+
+  #
+  # Additional nodes defined as an array so that its easier to iterate
+  # through them in the playbook.
+  # NOTE: The Datacenter/Cluster/Datastore/Network requires the vCenter MOID
+  # (Module Object ID) and not the name
+  #
+  "additional_nodes": [
+    {
+      "hostname": "mynsx-02.mylab.local",
+      "mgmt_ip": "10.114.200.12",
+      "prefix": "27",
+      "datacenter": "Datacenter",
+      "cluster": "Management",
+      "datastore": "datastore7",
+      "portgroup": "VM Network"
+    },
+    {
+      "hostname": "mynsx-03.mylab.local",
+      "mgmt_ip": "10.114.200.13",
+      "prefix": "27",
+      "datacenter": "Datacenter",
+      "cluster": "Management",
+      "datastore": "datastore5",
+      "portgroup": "VM Network"
+    }
+  ],
+
+  #
+  # One or more compute managers that have to be registered with NSX
+  #
+  "compute_managers": [
+    {
+      "display_name": "Sector-A vCenter",
+      "mgmt_ip": "vc.sa.bmrf.io",
+      "origin_type": "vCenter",
+      "credential_type": "UsernamePasswordLoginCredential",
+      "username": "administrator@vsphere.local",
+      "password": "VMware123!"
+    }
+  ],
+  #
+  # IP Pools for Edges or hosts
+  #
+  "ip_pools": [
+    {
+      "display_name": "ip-edge-tep-pool",
+      "subnets": [
+        {
+          "allocation_ranges": [
+            {
+             "start": "172.16.23.2",
+             "end": "172.16.23.50"
+            }
+          ],
+          "gateway_ip": "172.16.23.1",
+          "cidr": "172.16.23.0/24"
+        }
+      ]
+    }
+  ],
+
+  #
+  # Uplink Profiles for Edges and ESXi hosts
+  #
+  "edge_uplink_profiles": [
+    {
+      "display_name": "up-edge-mtep",
+      "teaming": {
+        "active_list": [
+          {
+            "uplink_name": "fp-eth0",
+            "uplink_type": "PNIC"
+          },
+          {
+            "uplink_name": "fp-eth1",
+            "uplink_type": "PNIC"
+          }
+        ],
+        "policy": "LOADBALANCE_SRCID"
+      },
+      "named_teamings" : [
+        {
+          "name": "uplink-1",
+          "active_list": [
+            {
+              "uplink_name": "fp-eth0",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "policy": "FAILOVER_ORDER"
+        },
+        {
+          "name": "uplink-2",
+          "active_list": [
+            {
+              "uplink_name": "fp-eth1",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "policy": "FAILOVER_ORDER"
+        }
+      ],
+      "transport_vlan": 23,
+      "mtu": 1700,
+    },
+  ],
+  "esxi_uplink_profiles": [
+    {
+      "display_name": "up-esxi-mtep",
+      "teaming": {
+        "active_list": [
+          {
+            "uplink_name": "uplink-1",
+            "uplink_type": "PNIC"
+          },
+          {
+            "uplink_name": "uplink-2",
+            "uplink_type": "PNIC"
+          }
+        ],
+        "policy": "LOADBALANCE_SRCID"
+      },
+      "named_teamings" : [
+        {
+          "name": "uplink-1",
+          "active_list": [
+            {
+              "uplink_name": "uplink-1",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "policy": "FAILOVER_ORDER"
+        },
+        {
+          "name": "uplink-2",
+          "active_list": [
+            {
+              "uplink_name": "uplink-2",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "policy": "FAILOVER_ORDER"
+        },
+        {
+          "name": "uplink-1-active-uplink-2-standby",
+          "active_list": [
+            {
+              "uplink_name": "uplink-1",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "standby_list": [
+            {
+              "uplink_name": "uplink-2",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "policy": "FAILOVER_ORDER"
+        },
+        {
+          "name": "uplink-2-active-uplink-1-standby",
+          "active_list": [
+            {
+              "uplink_name": "uplink-2",
+              "uplink_type": "PNIC"
+            },
+            {
+              "uplink_name": "uplink-1",
+              "uplink_type": "PNIC"
+            }
+          ],
+          "standby_list": [
+          ],
+          "policy": "LOADBALANCE_SRCID"
+        }
+      ],
+      "transport_vlan": 23,
+    }
+  ],
+
+  #
+  # Transport Zones for NSX Edges or ESXi hosts
+  #
+  "transport_zones": [
+    {
+      "display_name": "tz-overlay",
+      "description": "NSX Configured Overlay Transport zone",
+      "transport_type": "OVERLAY",
+      "host_switch_name": "n-nsx",
+      "uplink_teaming_policy_names": []
+    },
+    {
+      "display_name": "tz-vlan",
+      "description": "NSX Configured VLAN Transport Zone",
+      "transport_type": "VLAN",
+      "host_switch_name": "n-nsx",
+      "uplink_teaming_policy_names": [ "uplink-1" , "uplink-2", "uplink-1-active-uplink-2-standby", "uplink-2-active-uplink-1-standby" ],
+      "nested_nsx": false
+    },
+    {
+      "display_name": "tz-edge",
+      "description": "NSX Configured VLAN Transport Zone for Edges",
+      "transport_type": "VLAN",
+      "host_switch_name": "n-nsx",
+      "uplink_teaming_policy_names": [ "uplink-1" , "uplink-2" ],
+      "nested_nsx": false
+    }       
+  ],
+  
+  #
+  # Transport Zones for NSX Edges or ESXi hosts
+  #
+  "transport_node_profiles": [
+    {
+      "display_name": "tn-esxi-profile",
+      "description": "Compute Transport Node Profile",
+      "host_switches": [
+        {
+          "host_switch_profiles": [
+            {
+              "name": "up-esxi-mtep",
+              "type": "UplinkHostSwitchProfile"
+            }
+          ],
+          "host_switch_name": "Sector-A-VDS",
+          "host_switch_type": "VDS",
+          "host_switch_mode": "STANDARD",
+          "uplinks" : [ 
+            {
+            "vds_uplink_name" : "Uplink 1",
+            "uplink_name" : "uplink-1"
+            }, 
+            {
+            "vds_uplink_name" : "Uplink 2",
+            "uplink_name" : "uplink-2"
+            } 
+          ],
+          "transport_zone_endpoints": [
+            {
+              "transport_zone_name": "tz-overlay"
+            },
+            {
+              "transport_zone_name": "tz-vlan"
+            },
+          ],
+          "ip_assignment_spec":
+            {
+              "resource_type": "AssignedByDhcp"
+            }
+        }
+      ]
+    }
+  ],
+
+  #
+  # Transport Node variables for Edge 1 
+  #
+  "transport_nodes_edge_1": [
+    {
+      "display_name": "edge1",
+      "description": "NSX Edge Node 1",
+      "host_switches": [
+        {
+          "host_switch_profiles": [
+            {
+              "name": "up-edge-mtep",
+              "type": "UplinkHostSwitchProfile"
+            },
+            {
+              "name": "LLDP [Send Packet Disabled]",
+              "type": "LldpHostSwitchProfile"
+            }
+          ],
+          "host_switch_name": "n-nsx",
+          "pnics": [
+            {
+              "device_name": "fp-eth0",
+              "uplink_name": "fp-eth0"
+            },
+            {
+              "device_name": "fp-eth1",
+              "uplink_name": "fp-eth1"
+            }
+          ],
+          "ip_assignment_spec":
+            {
+              "resource_type": "StaticIpPoolSpec",
+              "ip_pool_name": "ip-edge-tep-pool"
+            }
+        }
+      ],
+      "transport_zone_endpoints": [
+        {
+          "transport_zone_name": "tz-overlay"
+        },
+        {
+          "transport_zone_name": "tz-edge"
+        }
+      ],
+      "node_deployment_info": {
+        "deployment_type": "VIRTUAL_MACHINE",
+        "deployment_config": {
+          "vm_deployment_config": {
+            "vc_name": "Sector-A vCenter",
+            "vc_username": "administrator@vsphere.local",
+            "vc_password": "VMware123!",
+            "compute": "Sector-A",
+            "storage": "Sector-A-NFS",
+            "dns_servers": [
+              "172.16.11.2",
+              "172.16.11.3"
+            ],
+            "ntp_servers": [
+              "time.bmrf.io",
+              "time.google.com"
+            ],
+            "search_domains": [
+              "sa.bmrf.io"
+            ],
+            # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
+            "reservation_info":{
+              "cpu_reservation":{
+                "reservation_in_mhz": 0
+              },
+              "memory_reservation":{
+                "reservation_percentage": 0
+              }
+            # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
+            },          
+            "management_network": "Management-VL24",
+            "hostname": "edge1.sa.bmrf.io",
+            "data_networks": [
+              "Trunk-ToR-A",
+              "Trunk-ToR-B"
+            ],
+            "management_port_subnets": [
+              {
+                "ip_addresses": [ "172.16.24.17" ],
+                "prefix_length": 24
+              }
+            ],
+            "default_gateway_addresses": [ "172.16.24.1" ],
+            "allow_ssh_root_login": true,
+            "enable_ssh": true,
+            "placement_type": "VsphereDeploymentConfig"
+          },
+          "form_factor": "SMALL",
+          "node_user_settings": {
+            "cli_username": "admin" ,
+            "root_password": "VMware123!VMware123!",
+            "cli_password": "VMware123!VMware123!",
+            "audit_username": "audit",
+            "audit_password": "VMware123!VMware123!"
+          }
+        },
+        "resource_type": "EdgeNode",
+        "display_name": "edge1"
+      },
+    },
+  ],
+
+  #
+  # Transport Node variables for Edge 2 
+  #  
+  "transport_nodes_edge_2": [
+    {
+      "display_name": "edge2",
+      "description": "NSX Edge Node 2",
+      "host_switches": [
+        {
+          "host_switch_profiles": [
+            {
+              "name": "up-edge-mtep",
+              "type": "UplinkHostSwitchProfile"
+            },
+            {
+              "name": "LLDP [Send Packet Disabled]",
+              "type": "LldpHostSwitchProfile"
+            }
+          ],
+          "host_switch_name": "n-nsx",
+          "pnics": [
+            {
+              "device_name": "fp-eth0",
+              "uplink_name": "fp-eth0"
+            },
+            {
+              "device_name": "fp-eth1",
+              "uplink_name": "fp-eth1"
+            }
+          ],
+          "ip_assignment_spec":
+            {
+              "resource_type": "StaticIpPoolSpec",
+              "ip_pool_name": "ip-edge-tep-pool"
+            }
+        }
+      ],
+      "transport_zone_endpoints": [
+        {
+          "transport_zone_name": "tz-overlay"
+        },
+        {
+          "transport_zone_name": "tz-edge"
+        }
+      ],
+      "node_deployment_info": {
+        "deployment_type": "VIRTUAL_MACHINE",
+        "deployment_config": {
+          "vm_deployment_config": {
+            "vc_name": "Sector-A vCenter",
+            "vc_username": "administrator@vsphere.local",
+            "vc_password": "VMware123!",
+            "compute": "Sector-A",
+            "storage": "Sector-A-NFS",
+            "dns_servers": [
+              "172.16.11.2",
+              "172.16.11.3"
+            ],
+            "ntp_servers": [
+              "time.bmrf.io",
+              "time.google.com"
+            ],
+            "search_domains": [
+              "sa.bmrf.io"
+            ],
+            # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
+            "reservation_info":{
+              "cpu_reservation":{
+                "reservation_in_mhz": 0
+              },
+              "memory_reservation":{
+                "reservation_percentage": 0
+              }
+            # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
+            },          
+            "management_network": "Management-VL24",
+            "hostname": "edge2.sa.bmrf.io",
+            "data_networks": [
+              "Trunk-ToR-A",
+              "Trunk-ToR-B"
+            ],
+            "management_port_subnets": [
+              {
+                "ip_addresses": [ "172.16.24.18" ],
+                "prefix_length": 24
+              }
+            ],
+            "default_gateway_addresses": [ "172.16.24.1" ],
+            "allow_ssh_root_login": true,
+            "enable_ssh": true,
+            "placement_type": "VsphereDeploymentConfig"
+          },
+          "form_factor": "SMALL",
+          "node_user_settings": {
+            "cli_username": "admin" ,
+            "root_password": "VMware123!VMware123!",
+            "cli_password": "VMware123!VMware123!",
+            "audit_username": "audit",
+            "audit_password": "VMware123!VMware123!"
+          }
+        },
+        "resource_type": "EdgeNode",
+        "display_name": "edge2"
+      },
+    },
+  ],
+
+  "edge_clusters": [
+    {
+      "display_name": "edge-cluster-01"
+    }
+  ]
+    
+}

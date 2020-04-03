@@ -1,0 +1,61 @@
+---
+#
+# Playbook to register Compute Manager with NSX Appliance, Create IP Pools 
+#
+#
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars_files:
+    - deploy_nsx_cluster_vars.yml
+  tasks:
+    - name: Create Edge Transport Node 1
+      nsxt_transport_nodes:
+        hostname: "{{ nsxt_vip }}"
+        username: "{{ nsx_username }}"
+        password: "{{ nsx_password }}"
+        validate_certs: "{{ validate_certs }}"
+        display_name: "{{ item.display_name }}"
+        host_switch_spec:
+          resource_type: StandardHostSwitchSpec
+          host_switches: "{{ item.host_switches }}"
+        transport_zone_endpoints: "{{ item.transport_zone_endpoints }}"
+        node_deployment_info: "{{ item.node_deployment_info }}"
+        state: "{{ state }}"
+      with_items:
+        - "{{ transport_nodes_edge_1 }}"
+    
+    - name: Sleeping for 45 seconds
+      wait_for:
+        timeout: 45
+      delegate_to: localhost
+        
+    - name: Create Edge Transport Node 2
+      nsxt_transport_nodes:
+        hostname: "{{ nsxt_vip }}"
+        username: "{{ nsx_username }}"
+        password: "{{ nsx_password }}"
+        validate_certs: "{{ validate_certs }}"
+        display_name: "{{ item.display_name }}"
+        host_switch_spec:
+          resource_type: StandardHostSwitchSpec
+          host_switches: "{{ item.host_switches }}"
+        transport_zone_endpoints: "{{ item.transport_zone_endpoints }}"
+        node_deployment_info: "{{ item.node_deployment_info }}"
+        state: "{{ state }}"
+      with_items:
+        - "{{ transport_nodes_edge_2 }}"
+
+    - name: Create Edge Cluster
+      nsxt_edge_clusters:
+        hostname: "{{ nsxt_vip }}"
+        username: "{{ nsx_username }}"
+        password: "{{ nsx_password }}"
+        validate_certs: "{{ validate_certs }}"
+        display_name: "{{ item.display_name }}"
+        members: 
+          - transport_node_name: "{{ transport_nodes_edge_1[0].display_name }}"
+          - transport_node_name: "{{ transport_nodes_edge_2[0].display_name }}"
+        state: "{{ state }}"
+      with_items:
+        - "{{ edge_clusters }}"

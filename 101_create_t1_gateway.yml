@@ -1,0 +1,35 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+---
+  - hosts: localhost
+    become: yes
+    vars_files:
+      - build_topology_vars.yml
+    tasks:
+      - name: Create Tier1
+        nsxt_policy_tier1:
+          hostname: "{{ nsxt_vip }}"
+          username: "{{ nsx_username }}"
+          password: "{{ nsx_password }}"
+          validate_certs: "{{ validate_certs }}"
+          state: "{{ state }}"
+          display_name: "{{ item.display_name }}"
+          tier0_display_name: "{{ item.tier0_display_name }}"
+          route_advertisement_types: "{{ item.route_advertisement_types }}"
+        with_items:
+          - "{{ tier1_gateways }}"
+          
+      - name: Create Segments 
+        nsxt_policy_segment:
+          hostname: "{{ nsxt_vip }}"
+          username: "{{ nsx_username }}"
+          password: "{{ nsx_password }}"
+          state: "{{ state }}"
+          validate_certs: "{{ validate_certs }}"
+          display_name: "{{ item.display_name }}"
+          tier1_id: "{{ item.tier1_display_name }}"
+          transport_zone_display_name: "{{ item.tz }}"
+          subnets: "{{ item.subnets }}"
+        with_items:
+          - "{{ segments_t1 }}"
+    
