@@ -111,7 +111,24 @@
           "cidr": "172.16.23.0/24"
         }
       ]
-    }
+    },
+# THIS IS FOR ESXI HOSTS BUT I RUN DHCP AT HOME. UNCOMMENT THIS OUT AND MODIFY THE SECTION FOR THE TN PROFILE OF THE ESXI HOST
+#    {
+#      "display_name": "ip-esxi-tep-pool",
+#      "subnets": [
+#        {
+#          "allocation_ranges": [
+#            {
+#             "start": "172.16.23.2",
+#             "end": "172.16.23.50"
+#            }
+#          ],
+#          "gateway_ip": "172.16.23.1",
+#          "cidr": "172.16.23.0/24"
+#        }
+#      ]
+#    },
+
   ],
 
   #
@@ -298,9 +315,11 @@
               "transport_zone_name": "tz-vlan"
             },
           ],
+# CHANGE THIS IF YOU ARE USING IP POOLS          
           "ip_assignment_spec":
             {
-              "resource_type": "AssignedByDhcp"
+              "resource_type": "AssignedByDhcp" # Change this to StatcIpPoolSpec and add a comma at the end
+              # "ip_pool_name": "name-of-the-ip-pool-you-made-above"
             }
         }
       ]
