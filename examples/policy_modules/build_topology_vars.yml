@@ -1,0 +1,53 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause OR GPL-3.0-only
+#
+# Variables file to deploy a simple topology
+
+{
+    "nsx_manager": "nsx_manager_IP",
+    "nsx_username": "nsx_username",
+    "nsx_password": "nsx_password",
+    "validate_certs": "false",
+
+    "state": "absent",
+
+    "tier0_gateways": [
+      {
+        "display_name": "Tier-0",
+        "ha_mode": "ACTIVE_STANDBY",
+        "tags": [
+          {
+            "tag": "ansible",
+            "scope": "demo"
+          }
+        ],
+        "locale_services": [
+          {
+            "state": "present",
+            "id": "test-t0ls",
+            "route_redistribution_types": ["TIER0_STATIC", "TIER0_NAT"],
+            "edge_cluster_info": {
+              "edge_cluster_name": "edge-cluster-01"
+            },
+            "BGP": {
+              "state": "present",
+              "local_as_num": '1211'
+            }
+          }
+        ]
+      }
+    ],
+
+    "tier1_gateways": [
+      {
+        "display_name": "Tier-1",
+        "tier0_display_name": "Tier-0",
+        "tags": [
+          {
+            "tag": "ansible",
+            "scope": "demo"
+          }
+        ]
+      }
+    ],
+}
