@@ -34,8 +34,8 @@
         path_to_ova: "{{ nsx_ova_path }}"
         ova_file: "{{ nsx_ova }}"
         # temp setup because I use a nested vcenter
-        vcenter: "vc.bmrf.io"
-        #vcenter: "{{ compute_managers[0]['mgmt_ip'] }}"
+        #vcenter: "vc.bmrf.io"
+        vcenter: "{{ compute_managers[0]['mgmt_ip'] }}"
         vcenter_user: "{{ compute_managers[0]['username'] }}"
         vcenter_passwd: "{{ compute_managers[0]['password'] }}"
 

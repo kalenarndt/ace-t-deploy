@@ -57,10 +57,10 @@ Creates a Tier-0 Logical Router (t0-ecmp)
   * Configures ECMP
   * Enables BGP
     * Sets the local AS number
-    * Sets 1 BGP neighbor for fabric a
-    * Sets the source addresses to be the router ports that exist on the vlan for fabric a
+    * Sets 1 BGP neighbor for fabric a and 1 neighbor for fabric b
+    * Sets the source addresses to be the router ports that exist on the vlan for fabric a and for fabric b
     * Configures modified BGP timers for 4, 12
-    * Configures a BFD peer for this neighbor
+    * Configures a BFD peer for both neighbors
     * Enables Route Redistribution [TIER0_CONNECTED, TIER0_NAT, TIER1-Connected, T1_LB_VIP]
 * Creates a Tier-1 Logical Router (t1-general)
 * Downlinks the Tier-1 to t0-ecmp
