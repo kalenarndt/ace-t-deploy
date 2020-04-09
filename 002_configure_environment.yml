@@ -128,6 +128,6 @@
         resource_type: "TransportNodeCollection"
         description: "Transport Node Collections Hosts"
         compute_manager_name: "{{compute_managers[0].display_name}}"
-        cluster_name: "Sector-A"
+        cluster_name: ""{{compute_managers[0].compute_cluster_name}}""
         transport_node_profile_name: "{{transport_node_profiles[0].display_name}}"
         state: "{{ state }}"
