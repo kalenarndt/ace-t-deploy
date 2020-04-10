@@ -652,14 +652,14 @@ class NSXTSegment(NSXTBaseRealizableResource):
                 required=False,
                 type='dict',
                 options=dict(
-                    address_pool_id=dict(
-                        required=False,
-                        type='str'
-                    ),
-                    address_pool_display_name=dict(
-                        required=False,
-                        type='str'
-                    ),
+#                    address_pool_id=dict(
+#                        required=False,
+#                        type='str'
+#                    ),
+#                    address_pool_display_name=dict(
+#                        required=False,
+#                        type='str'
+#                    ),
                     connectivity=dict(
                         default="ON",
                         type='str',
@@ -882,27 +882,27 @@ class NSXTSegment(NSXTBaseRealizableResource):
             nsx_resource_params["transport_zone_path"] = (
                 transport_zone_base_url + "/" + transport_zone_id)
 
-        if 'advanced_config' in nsx_resource_params and nsx_resource_params[
-                'advanced_config']:
-            if nsx_resource_params['advanced_config'][
-                    'address_pool_id']:
-                address_pool_id = nsx_resource_params['advanced_config'].pop(
-                    'address_pool_id')
-                nsx_resource_params['advanced_config'].pop(
-                    'address_pool_display_name')
-            else:
-                address_pool_id = self.get_id_from_display_name(
-                    IP_POOL_URL, nsx_resource_params['advanced_config'][
-                        'address_pool_display_name'], "Ip Pool",
-                    ignore_not_found_error=False)
-                nsx_resource_params['advanced_config'].pop(
-                    'address_pool_display_name')
-                nsx_resource_params['advanced_config'].pop(
-                    'address_pool_id')
-            if address_pool_id:
-                address_pool_paths = [IP_POOL_URL + "/" + address_pool_id]
-                nsx_resource_params['advanced_config'][
-                    'address_pool_paths'] = address_pool_paths
+#        if 'advanced_config' in nsx_resource_params and nsx_resource_params[
+#                'advanced_config']:
+#            if nsx_resource_params['advanced_config'][
+#                    'address_pool_id']:
+#                address_pool_id = nsx_resource_params['advanced_config'].pop(
+#                    'address_pool_id')
+#                nsx_resource_params['advanced_config'].pop(
+#                    'address_pool_display_name')
+#            else:
+#                address_pool_id = self.get_id_from_display_name(
+#                    IP_POOL_URL, nsx_resource_params['advanced_config'][
+#                        'address_pool_display_name'], "Ip Pool",
+#                    ignore_not_found_error=False)
+#                nsx_resource_params['advanced_config'].pop(
+#                    'address_pool_display_name')
+#                nsx_resource_params['advanced_config'].pop(
+#                    'address_pool_id')
+#            if address_pool_id:
+#                address_pool_paths = [IP_POOL_URL + "/" + address_pool_id]
+#                nsx_resource_params['advanced_config'][
+#                    'address_pool_paths'] = address_pool_paths
 
     def update_parent_info(self, parent_info):
         parent_info["segment_id"] = self.id

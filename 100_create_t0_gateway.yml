@@ -16,6 +16,7 @@
           display_name: "{{ item.display_name }}"
           vlan_ids: "{{ item.vlan_ids }}"
           transport_zone_display_name: "{{ item.transport_zone_display_name }}"
+          advanced_config: "{{ item.advanced_config }}"
         with_items:
           - "{{ segments_t0 }}"
 
