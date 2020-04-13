@@ -78,7 +78,7 @@
           validate_certs: "{{ validate_certs }}"
           wait_time: 50
 
-# Accepts the NSX-T Manager EULA          
+# Accepts the NSX-T Manager EULA
     - name: Accept NSX-T EULA
       nsxt_eula_accept:
           hostname: "{{ nsxt_vip }}"

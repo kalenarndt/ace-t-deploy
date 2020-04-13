@@ -34,17 +34,16 @@
         validate_certs: "{{ validate_certs }}"
         license_key: "{{ license_key }}"
         state: "{{ state }}"
-
-        
-  # Create IP Pools for NSX Edges or ESXi hosts       
-    - name: Create IP Pools
-      nsxt_ip_pools:
+          
+  # Create IP Pools for NSX Edges or ESXi hosts             
+    - name: Create Policy IP Pools
+      nsxt_policy_ip_pool:
         hostname: "{{ nsxt_vip }}"
         username: "{{ nsx_username }}"
         password: "{{ nsx_password }}"
         validate_certs: "{{ validate_certs }}"
         display_name: "{{ item.display_name }}"
-        subnets: "{{ item.subnets }}"
+        pool_static_subnets: "{{ item.pool_static_subnets }}"
         state: "{{ state }}"
       with_items:
         - "{{ ip_pools }}"
@@ -83,7 +82,7 @@
         - "{{ esxi_uplink_profiles }}"
 
   # Create Transport Zones for NSX Edges and ESXi hosts
-    - name: Create transport zones
+    - name: Create Transport Zones
       nsxt_transport_zones:
         hostname: "{{ nsxt_vip }}"
         username: "{{ nsx_username }}"
@@ -128,6 +127,6 @@
         resource_type: "TransportNodeCollection"
         description: "Transport Node Collections Hosts"
         compute_manager_name: "{{compute_managers[0].display_name}}"
-        cluster_name: ""{{compute_managers[0].compute_cluster_name}}""
+        cluster_name: "{{compute_managers[0].compute_cluster_name}}"
         transport_node_profile_name: "{{transport_node_profiles[0].display_name}}"
         state: "{{ state }}"

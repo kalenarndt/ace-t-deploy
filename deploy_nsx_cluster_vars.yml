@@ -99,18 +99,20 @@
   "ip_pools": [
     {
       "display_name": "ip-edge-tep-pool",
-      "subnets": [
+      "pool_static_subnets":[
         {
-          "allocation_ranges": [
+          "display_name": "ip-edge-tep-pool-subnet-1",
+          "state": present,
+          "cidr": "192.168.23.0/24",
+          "gateway_ip": "192.168.23.1",
+          "allocation_ranges":[
             {
-             "start": "172.16.23.2",
-             "end": "172.16.23.50"
-            }
+              "start": "192.168.23.2",
+              "end": "192.168.23.50"
+            },
           ],
-          "gateway_ip": "172.16.23.1",
-          "cidr": "172.16.23.0/24"
-        }
-      ]
+        },
+      ],
     },
 # THIS IS FOR ESXI HOSTS BUT I RUN DHCP AT HOME. UNCOMMENT THIS OUT AND MODIFY THE SECTION FOR THE TN PROFILE OF THE ESXI HOST
 #    {
