@@ -31,26 +31,26 @@
   #
   "domain": "bmrf.io",
   "netmask": "255.255.255.0",
-  "gateway": "172.16.24.1",
+  "gateway": "172.16.11.1",
   "dns_server": "172.16.11.2 172.16.11.3",
   "ntp_server": "time.bmrf.io time.google.com",
   "ssh_enabled": True,
   "deployment_size": "SMALL",
   "allow_ssh_root_login": True,
   "license_key": "xxxxx-xxxxx-xxxxx-xxxxx-xxxxx",
-  "nsxt_vip": "172.16.24.14",
+  "nsxt_vip": "172.16.11.19",
 
   #
   # First NSX appliance node. Defined separate based on the consumption.
   # Accepts both IP (IPv4) and FQDN for 'mgmt_ip'
   #
   "nsx_node1": {
-    "hostname": "nsxt-lm1.sa.bmrf.io",
-    "mgmt_ip": "172.16.24.13",
+    "hostname": "nsxt-lm1.bmrf.io",
+    "mgmt_ip": "172.16.11.21",
     "datacenter": "Black Mesa",
     "cluster": "Sector F",
     "datastore": "iSCSI",
-    "portgroup": "Sector-A-VL24"
+    "portgroup": "Management-VL11"
   },
 
   #
@@ -85,12 +85,13 @@
   #
   "compute_managers": [
     {
-      "display_name": "Sector-A vCenter",
-      "mgmt_ip": "vc.sa.bmrf.io",
+      "display_name": "vc.bmrf.io",
+      "mgmt_ip": "vc.bmrf.io",
       "origin_type": "vCenter",
       "credential_type": "UsernamePasswordLoginCredential",
       "username": "administrator@vsphere.local",
-      "password": "VMware123!"
+      "password": "VMware123!",
+      "compute_cluster_name": "Sector F"
     }
   ],
   #
@@ -103,12 +104,12 @@
         {
           "display_name": "ip-edge-tep-pool-subnet-1",
           "state": present,
-          "cidr": "192.168.23.0/24",
-          "gateway_ip": "192.168.23.1",
+          "cidr": "172.16.13.0/24",
+          "gateway_ip": "172.16.13.1",
           "allocation_ranges":[
             {
-              "start": "192.168.23.2",
-              "end": "192.168.23.50"
+              "start": "172.16.13.2",
+              "end": "172.16.13.50"
             },
           ],
         },
@@ -296,7 +297,7 @@
               "type": "UplinkHostSwitchProfile"
             }
           ],
-          "host_switch_name": "Sector-A-VDS",
+          "host_switch_name": "Sector-F-VDS",
           "host_switch_type": "VDS",
           "host_switch_mode": "STANDARD",
           "uplinks" : [ 
@@ -377,11 +378,11 @@
         "deployment_type": "VIRTUAL_MACHINE",
         "deployment_config": {
           "vm_deployment_config": {
-            "vc_name": "Sector-A vCenter",
+            "vc_name": "vc.bmrf.io",
             "vc_username": "administrator@vsphere.local",
             "vc_password": "VMware123!",
-            "compute": "Sector-A",
-            "storage": "Sector-A-NFS",
+            "compute": "Sector F",
+            "storage": "iSCSI",
             "dns_servers": [
               "172.16.11.2",
               "172.16.11.3"
@@ -391,7 +392,7 @@
               "time.google.com"
             ],
             "search_domains": [
-              "sa.bmrf.io"
+              "bmrf.io"
             ],
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             "reservation_info":{
@@ -403,15 +404,15 @@
               }
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             },          
-            "management_network": "Management-VL24",
-            "hostname": "edge1.sa.bmrf.io",
+            "management_network": "Management-VL11",
+            "hostname": "edge1.bmrf.io",
             "data_networks": [
-              "Trunk-ToR-A",
-              "Trunk-ToR-B"
+              "NSXT-Edge-Trunk-A",
+              "NSXT-Edge-Trunk-B"
             ],
             "management_port_subnets": [
               {
-                "ip_addresses": [ "172.16.24.17" ],
+                "ip_addresses": [ "172.16.11.24" ],
                 "prefix_length": 24
               }
             ],
@@ -420,7 +421,7 @@
             "enable_ssh": true,
             "placement_type": "VsphereDeploymentConfig"
           },
-          "form_factor": "SMALL",
+          "form_factor": "LARGE",
           "node_user_settings": {
             "cli_username": "admin" ,
             "root_password": "VMware123!VMware123!",
@@ -484,11 +485,11 @@
         "deployment_type": "VIRTUAL_MACHINE",
         "deployment_config": {
           "vm_deployment_config": {
-            "vc_name": "Sector-A vCenter",
+            "vc_name": "vc.bmrf.io",
             "vc_username": "administrator@vsphere.local",
             "vc_password": "VMware123!",
-            "compute": "Sector-A",
-            "storage": "Sector-A-NFS",
+            "compute": "Sector F",
+            "storage": "iSCSI",
             "dns_servers": [
               "172.16.11.2",
               "172.16.11.3"
@@ -510,24 +511,24 @@
               }
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             },          
-            "management_network": "Management-VL24",
-            "hostname": "edge2.sa.bmrf.io",
+            "management_network": "Management-VL11",
+            "hostname": "edge2.bmrf.io",
             "data_networks": [
-              "Trunk-ToR-A",
-              "Trunk-ToR-B"
+              "NSXT-Edge-Trunk-A",
+              "NSXT-Edge-Trunk-B"
             ],
             "management_port_subnets": [
               {
-                "ip_addresses": [ "172.16.24.18" ],
+                "ip_addresses": [ "172.16.11.25" ],
                 "prefix_length": 24
               }
             ],
-            "default_gateway_addresses": [ "172.16.24.1" ],
+            "default_gateway_addresses": [ "172.16.11.1" ],
             "allow_ssh_root_login": true,
             "enable_ssh": true,
             "placement_type": "VsphereDeploymentConfig"
           },
-          "form_factor": "SMALL",
+          "form_factor": "LARGE",
           "node_user_settings": {
             "cli_username": "admin" ,
             "root_password": "VMware123!VMware123!",

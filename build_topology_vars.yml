@@ -4,7 +4,7 @@
 # Variables file to deploy a simple topology
 
 {
-    "nsxt_vip": "172.16.24.14",
+    "nsxt_vip": "172.16.11.19",
     "nsx_username": "admin",
     "nsx_password": "VMware123!VMware123!",
     "validate_certs": "false",

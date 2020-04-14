@@ -61,7 +61,7 @@
         - "{{ edge_clusters }}"
     
   # Sleeping so the cluster can come up
-    - name: Sleeping for 45 seconds
+    - name: Sleeping for 3 Minutes
       wait_for:
-        timeout: 45
+        timeout: 180
       delegate_to: localhost
