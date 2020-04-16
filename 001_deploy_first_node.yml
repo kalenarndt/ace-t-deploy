@@ -80,7 +80,7 @@
 
 # Accepts the NSX-T Manager EULA
     - name: Accept NSX-T EULA
-      nsxt_eula_accept:
+      nsxt_accept_eula:
           hostname: "{{ nsxt_vip }}"
           username: "{{ nsx_username }}"
           password: "{{ nsx_password }}"
