@@ -151,7 +151,7 @@
     "segments_t0": [
       {
         "display_name": "seg-edge-tor-a",
-        "transport_zone_display_name": "tz-edge",
+        "transport_zone_display_name": "tz-vlan",
         "vlan_ids":[
             "200"
         ],
@@ -161,7 +161,7 @@
       },
       {
         "display_name": "seg-edge-tor-b",
-        "transport_zone_display_name": "tz-edge",
+        "transport_zone_display_name": "tz-vlan",
         "vlan_ids":[
           "201"
         ],
@@ -189,7 +189,7 @@
             "tz": "tz-overlay",
             "subnets": [
                 {
-                  "gateway_address": "192.168.10.1/24"
+                  "gateway_address": "10.12.13.1/24"
                 }
             ],
         },
@@ -199,7 +199,7 @@
             "tz": "tz-overlay",
             "subnets": [
                 {
-                  "gateway_address": "192.168.20.1/24"
+                  "gateway_address": "10.12.14.1/24"
                 }
             ],
         },
@@ -209,7 +209,7 @@
             "tz": "tz-overlay",
             "subnets": [
                 {
-                  "gateway_address": "192.168.30.1/24"
+                  "gateway_address": "10.12.15.1/24"
                 }
             ],
         }

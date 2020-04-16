@@ -28,6 +28,7 @@
           validate_certs: "{{ validate_certs }}"
           state: "{{ state }}"
           display_name: "{{ item.display_name }}"
+          disable_firewall: "true"
           ha_mode: "{{ item.ha_mode }}"
           locale_services: "{{ item.locale_services }}"
         with_items:

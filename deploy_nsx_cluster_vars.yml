@@ -20,7 +20,7 @@
   #
   # OVA/OVF Information. Path can be on local file system or a HTTP URL
   #
-  "nsx_ova_path": "/mnt/c/Temp",
+  "nsx_ova_path": "/mnt/c/Users/ato/Desktop",
   "nsx_ova": "nsx-unified-appliance-3.0.0.0.0.15946739.ova",
 
   #
@@ -104,12 +104,12 @@
         {
           "display_name": "ip-edge-tep-pool-subnet-1",
           "state": present,
-          "cidr": "172.16.13.0/24",
-          "gateway_ip": "172.16.13.1",
+          "cidr": "172.16.18.0/24",
+          "gateway_ip": "172.16.18.1",
           "allocation_ranges":[
             {
-              "start": "172.16.13.2",
-              "end": "172.16.13.50"
+              "start": "172.16.18.2",
+              "end": "172.16.18.50"
             },
           ],
         },
@@ -175,7 +175,7 @@
           "policy": "FAILOVER_ORDER"
         }
       ],
-      "transport_vlan": 23,
+      "transport_vlan": 18,
       "mtu": 1700,
     },
   ],
@@ -271,14 +271,6 @@
       "host_switch_name": "n-nsx",
       "uplink_teaming_policy_names": [ "uplink-1" , "uplink-2", "uplink-1-active-uplink-2-standby", "uplink-2-active-uplink-1-standby" ],
       "nested_nsx": false
-    },
-    {
-      "display_name": "tz-edge",
-      "description": "NSX Configured VLAN Transport Zone for Edges",
-      "transport_type": "VLAN",
-      "host_switch_name": "n-nsx",
-      "uplink_teaming_policy_names": [ "uplink-1" , "uplink-2" ],
-      "nested_nsx": false
     }       
   ],
   
@@ -371,7 +363,7 @@
           "transport_zone_name": "tz-overlay"
         },
         {
-          "transport_zone_name": "tz-edge"
+          "transport_zone_name": "tz-vlan"
         }
       ],
       "node_deployment_info": {
@@ -478,7 +470,7 @@
           "transport_zone_name": "tz-overlay"
         },
         {
-          "transport_zone_name": "tz-edge"
+          "transport_zone_name": "tz-vlan"
         }
       ],
       "node_deployment_info": {
@@ -499,7 +491,7 @@
               "time.google.com"
             ],
             "search_domains": [
-              "sa.bmrf.io"
+              "bmrf.io"
             ],
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             "reservation_info":{
