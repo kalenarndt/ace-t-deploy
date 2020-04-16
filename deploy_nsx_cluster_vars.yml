@@ -48,7 +48,7 @@
     "hostname": "nsxt-lm1.bmrf.io",
     "mgmt_ip": "172.16.11.21",
     "datacenter": "Black Mesa",
-    "cluster": "Sector F",
+    "cluster": "Compute",
     "datastore": "iSCSI",
     "portgroup": "Management-VL11"
   },
@@ -85,13 +85,13 @@
   #
   "compute_managers": [
     {
-      "display_name": "vc.bmrf.io",
+      "display_name": "Lab vCenter",
       "mgmt_ip": "vc.bmrf.io",
       "origin_type": "vCenter",
       "credential_type": "UsernamePasswordLoginCredential",
       "username": "administrator@vsphere.local",
       "password": "VMware123!",
-      "compute_cluster_name": "Sector F"
+      "compute_cluster_name": "Compute"
     }
   ],
   #
@@ -378,10 +378,10 @@
         "deployment_type": "VIRTUAL_MACHINE",
         "deployment_config": {
           "vm_deployment_config": {
-            "vc_name": "vc.bmrf.io",
+            "vc_name": "Lab vCenter",
             "vc_username": "administrator@vsphere.local",
             "vc_password": "VMware123!",
-            "compute": "Sector F",
+            "compute": "Compute",
             "storage": "iSCSI",
             "dns_servers": [
               "172.16.11.2",
@@ -485,10 +485,10 @@
         "deployment_type": "VIRTUAL_MACHINE",
         "deployment_config": {
           "vm_deployment_config": {
-            "vc_name": "vc.bmrf.io",
+            "vc_name": "Lab vCenter",
             "vc_username": "administrator@vsphere.local",
             "vc_password": "VMware123!",
-            "compute": "Sector F",
+            "compute": "Compute",
             "storage": "iSCSI",
             "dns_servers": [
               "172.16.11.2",
