@@ -170,6 +170,29 @@
         }
       },
     ],
+
+    "segments_edge": [
+      {
+        "display_name": "seg-edge-trunk-a",
+        "transport_zone_display_name": "tz-vlan",
+        "vlan_ids":[
+            "0-4094"
+        ],
+        "advanced_config":{
+          "uplink_teaming_policy_name": "uplink-1"
+        }
+      },
+      {
+        "display_name": "seg-edge-trunk-b",
+        "transport_zone_display_name": "tz-vlan",
+        "vlan_ids":[
+          "0-4094"
+        ],
+        "advanced_config":{
+          "uplink_teaming_policy_name": "uplink-2"
+        }
+      },
+    ],
     
     "tier1_gateways": [
       {

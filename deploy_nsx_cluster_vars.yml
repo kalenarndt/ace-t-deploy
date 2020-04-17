@@ -95,8 +95,7 @@
     }
   ],
   #
-  # IP Pools for Edges or hosts
-  #
+# IP Pools for Edges or hosts
   "ip_pools": [
     {
       "display_name": "ip-edge-tep-pool",
@@ -115,23 +114,23 @@
         },
       ],
     },
-# THIS IS FOR ESXI HOSTS BUT I RUN DHCP AT HOME. UNCOMMENT THIS OUT AND MODIFY THE SECTION FOR THE TN PROFILE OF THE ESXI HOST
-#    {
-#      "display_name": "ip-esxi-tep-pool",
-#      "subnets": [
-#        {
-#          "allocation_ranges": [
-#            {
-#             "start": "172.16.23.2",
-#             "end": "172.16.23.50"
-#            }
-#          ],
-#          "gateway_ip": "172.16.23.1",
-#          "cidr": "172.16.23.0/24"
-#        }
-#      ]
-#    },
-
+    {
+      "display_name": "ip-esxi-tep-pool",
+      "pool_static_subnets":[
+        {
+          "display_name": "ip-esxi-tep-pool-subnet-1",
+          "state": present,
+          "cidr": "172.16.23.0/24",
+          "gateway_ip": "172.16.23.1",
+          "allocation_ranges":[
+            {
+              "start": "172.16.23.2",
+              "end": "172.16.23.50"
+            },
+          ],
+        },
+      ],
+    },
   ],
 
   #
@@ -253,9 +252,7 @@
     }
   ],
 
-  #
-  # Transport Zones for NSX Edges or ESXi hosts
-  #
+# Transport Zones for NSX Edges or ESXi hosts
   "transport_zones": [
     {
       "display_name": "tz-overlay",
@@ -313,8 +310,8 @@
 # CHANGE THIS IF YOU ARE USING IP POOLS          
           "ip_assignment_spec":
             {
-              "resource_type": "AssignedByDhcp" # Change this to StaticIpPoolSpec and add a comma at the end
-              # "ip_pool_name": "name-of-the-ip-pool-you-made-above"
+              "resource_type": "StaticIpPoolSpec",
+              "ip_pool_name": "ip-esxi-tep-pool"
             }
         }
       ]
