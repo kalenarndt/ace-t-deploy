@@ -4,7 +4,7 @@
   - hosts: localhost
     become: yes
     vars_files:
-      - build_topology_vars.yml
+      - answerfiles/first_site.yml
     tasks:
       - name: Create Tier1
         nsxt_policy_tier1:
