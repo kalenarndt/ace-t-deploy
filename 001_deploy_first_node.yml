@@ -9,7 +9,7 @@
   connection: local
   become: yes
   vars_files:
-    - deploy_nsx_cluster_vars.yml
+    - answerfiles/second-site.yml
   tasks:
 # Deploys the first NSX Manager 
     - name: Deploy NSX Manager OVA

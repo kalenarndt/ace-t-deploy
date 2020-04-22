@@ -7,7 +7,7 @@
   connection: local
   become: yes
   vars_files:
-    - deploy_nsx_cluster_vars.yml
+    - answerfiles/second-site.yml
   tasks:
     - name: Create Edge Transport Node 1
       nsxt_transport_nodes:
