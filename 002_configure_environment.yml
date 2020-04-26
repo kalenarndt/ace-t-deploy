@@ -7,7 +7,7 @@
   connection: local
   become: yes
   vars_files:
-    - answerfiles/second_site.yml
+    - answerfiles/first_site.yml
   tasks:
     - name: Register Compute Manager
       nsxt_fabric_compute_managers:
@@ -117,7 +117,7 @@
         - "{{ transport_node_profiles }}"
 
   # Attach TN Profile to vSphere Cluster and Prepare ESXi
-    - name: Attach Transport Node Profile to cluster
+    - name: Attach Transport Node Profile to Cluster
       nsxt_transport_node_collections:
         hostname: "{{ nsxt_vip }}"
         username: "{{ nsx_username }}"

@@ -50,7 +50,7 @@
     "datacenter": "Black Mesa",
     "cluster": "Compute",
     "datastore": "iSCSI",
-    "portgroup": "Management-VL11"
+    "portgroup": "VDS-Management-VL11"
   },
 
   #
@@ -393,7 +393,7 @@
               }
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             },          
-            "management_network": "Management-VL11",
+            "management_network": "VDS-Management-VL11",
             "hostname": "edge1.bmrf.io",
             "data_networks": [
               "NSXT-Edge-Trunk-A",
@@ -500,7 +500,7 @@
               }
             # THIS SECTION IS FOR HOME LAB DEPLOYMENTS
             },          
-            "management_network": "Management-VL11",
+            "management_network": "VDS-Management-VL11",
             "hostname": "edge2.bmrf.io",
             "data_networks": [
               "NSXT-Edge-Trunk-A",
